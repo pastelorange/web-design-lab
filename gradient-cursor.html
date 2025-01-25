@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gradient Cursor</title>
+    <style>
+      body {
+        cursor: none; /* Hide the default cursor */
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 50px;
+        height: 100vh;
+        margin: 0;
+        padding: 500px;
+        box-sizing: border-box;
+      }
+      .cursor {
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          hsl(0, 100%, 90%) 30%,
+          transparent 70%
+        );
+        pointer-events: none; /* Make sure the cursor doesn't block interactions */
+        transform: translate(-50%, -50%); /* Center the cursor */
+      }
+      .grid-item {
+        border: 1px solid black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cursor" id="cursor"></div>
+    <div class="grid-item" data-color="hsl(0, 100%, 75%)">Red</div>
+    <div class="grid-item" data-color="hsl(120, 100%, 50%)">Green</div>
+    <div class="grid-item" data-color="hsl(240, 100%, 75%)">Blue</div>
+    <div class="grid-item" data-color="hsl(60, 100%, 75%)">Yellow</div>
+    <div class="grid-item" data-color="hsl(300, 100%, 50%)">Purple</div>
+    <div class="grid-item" data-color="hsl(30, 100%, 75%)">Orange</div>
+    <div class="grid-item" data-color="hsl(330, 100%, 90%)">Pink</div>
+    <div class="grid-item" data-color="hsl(180, 100%, 75%)">Cyan</div>
+    <div class="grid-item" data-color="hsl(300, 100%, 75%)">Magenta</div>
+    <script>
+      // Create a custom cursor
+      document.addEventListener("mousemove", function (e) {
+        const cursor = document.getElementById("cursor");
+        cursor.style.left = e.pageX + "px";
+        cursor.style.top = e.pageY + "px";
+      });
+
+      // Change the cursor color based on the grid item's data-color attribute
+      const gridItems = document.querySelectorAll(".grid-item");
+      gridItems.forEach((item) => {
+        item.addEventListener("mouseenter", function () {
+          const color = item.getAttribute("data-color");
+          const cursor = document.getElementById("cursor");
+          cursor.style.background = `radial-gradient(circle, ${color} 30%, transparent 70%)`;
+        });
+      });
+    </script>
+  </body>
+</html>

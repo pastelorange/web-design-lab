@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>P5.js</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.2/p5.min.js"
+      integrity="sha512-1YMgn4j8cIL91s14ByDGmHtBU6+F8bWOMcF47S0cRO3QNm8SKPNexy4s3OCim9fABUtO++nJMtcpWbINWjMSzQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <script>
+      let textStr = "silly goose";
+      let layers = 3;
+
+      function setup() {
+        createCanvas(windowWidth, windowHeight);
+        textSize(96);
+        textAlign(CENTER, CENTER); // Center align the text
+        frameRate(5); // Animation speed
+      }
+
+      function draw() {
+        background("#fff4f4");
+
+        // !!! This shit is for centering the textStr
+        // Find the center of the canvas
+        let x = width / 2;
+        let y = height / 2;
+
+        // Calculate the total width of the text string
+        let totalWidth = 0;
+        for (let i = 0; i < textStr.length; i++) {
+          totalWidth += textWidth(textStr[i]);
+        }
+
+        // Adjust the starting x position to center the text
+        x -= totalWidth / 2;
+
+        // !!! End textStr centering
+
+        // Loop through the text layers
+        for (let j = 0; j < layers; j++) {
+          // Add a random offset to the x and y position
+          let xOffset = random(-4, 4);
+          let yOffset = random(-4, 4);
+          let currentX = x + xOffset; // Reset the x position (so the text is overlayed)
+
+          // Loop through the text string
+          for (let i = 0; i < textStr.length; i++) {
+            // Fill the text with a random color
+            fill(randomColor());
+            text(textStr[i], currentX, y + yOffset); // Draw the text at the current position
+            currentX += textWidth(textStr[i]); // Shift right the x position by the width of the current character
+          }
+        }
+      }
+
+      function randomColor() {
+        return color(random(255), random(255), random(255), 255); // R G B A
+      }
+    </script>
+  </body>
+</html>
