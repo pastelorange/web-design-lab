@@ -206,15 +206,8 @@
 
       Composite.add(engine.world, mouseConstraint);
 
-      // allow scroll through the canvas
-      mouseConstraint.mouse.element.removeEventListener(
-        "mousewheel",
-        mouseConstraint.mouse.mousewheel
-      );
-      mouseConstraint.mouse.element.removeEventListener(
-        "DOMMouseScroll",
-        mouseConstraint.mouse.mousewheel
-      );
+      /*
+      Below is code for opening a new tab when the user clicks on a body
 
       // For calculating if the user is dragging or clicking
       let isDragging = false;
@@ -276,6 +269,7 @@
         }
         startPosition = null;
       });
+      */
 
       // run the renderer
       Render.run(render);
