@@ -53,14 +53,17 @@
     <div>
       <h1>Randomly Placed Draggable Cards</h1>
       <p>
-        Made with
-        <a href="https://gsap.com/docs/v3/Plugins/Draggable/">GSAP's Draggable plugin.</a>
-        The cards are randomly placed within the container and can be dragged around. The placement isn't completely
-        random. It is clustered around the center of the container.
+        The cards are randomly placed within the container and can be dragged around. The random placement is either
+        clustered or truly random, depending on the settings.
       </p>
       <p>
         At mobile size (&lt;684px), the dragging and random placement is disabled, and the cards are stacked in a
         column.
+      </p>
+      <p>
+        Source code on
+        <a href="https://github.com/pastelorange/web-design-experiments/blob/main/draggable-cards.html">GitHub</a>. Made
+        with <a href="https://gsap.com/docs/v3/Plugins/Draggable/">GSAP's Draggable plugin.</a>
       </p>
     </div>
 
@@ -96,11 +99,22 @@
         />
         <span id="clusterCentralityYValue">4</span>
       </div>
+      <!-- Checkbox for Enable Clustering -->
+      <div>
+        <label for="enableClustering">Enable Clustering:</label>
+        <input
+          type="checkbox"
+          id="enableClustering"
+          name="enableClustering"
+          checked
+          onchange="isClustered = this.checked"
+        />
+      </div>
       <!-- Button to regenerate positions -->
       <button onclick="initializeDraggable()" style="margin: 10px 0">Regenerate Positions</button>
     </div>
 
-    <!-- CARDS -->
+    <!-- DRAGGABLE CARDS -->
     <div class="card-container">
       <div class="card" style="background-color: #ff7f7f">Card 1</div>
       <div class="card" style="background-color: #7f7fff">Card 2</div>
@@ -112,12 +126,27 @@
 
     <!-- JS CODE TO MAKE THIS WORK -->
     <script>
-      gsap.registerPlugin(Draggable);
+      /**
+       * USER CONFIG OPTIONS
+       */
 
       // How clustered the cards are around the center
       // Lower values = less clustered
       let clusterCentralityX = 4;
       let clusterCentralityY = 4;
+
+      // T: Clustered, F: Random
+      let isClustered = true;
+
+      // Feel free to change these to match your own class names
+      const container = document.querySelector(".card-container"); // The class name for the element containing the draggable elements
+      const cards = document.querySelectorAll(".card"); // The class name for the draggable elements
+
+      const mobileBreakpoint = 684; // The screen pixel width at which the dragging is disabled
+
+      /**
+       * THE ACTUAL CODE IS BELOW
+       */
 
       /**
        * Generate random position for a card
@@ -135,23 +164,30 @@
         const centerY = containerRect.height / 2;
 
         // Generate a random position around clustered around the center
-        const x = centerX + (Math.random() - 0.5) * (containerRect.width / clusterCentralityX) - cardRect.width / 2;
-        const y = centerY + (Math.random() - 0.5) * (containerRect.height / clusterCentralityY) - cardRect.height / 2;
-        return { x, y };
+        if (isClustered) {
+          const x = centerX + (Math.random() - 0.5) * (containerRect.width / clusterCentralityX) - cardRect.width / 2;
+          const y = centerY + (Math.random() - 0.5) * (containerRect.height / clusterCentralityY) - cardRect.height / 2;
+          return { x, y };
+        }
+        // Or generate a truly random position
+        else {
+          const x = Math.random() * (containerRect.width - cardRect.width);
+          const y = Math.random() * (containerRect.height - cardRect.height);
+          return { x, y };
+        }
       }
 
       /**
        * Places the cards and makes them draggable
        */
       function initializeDraggable() {
-        // Don't bother with this function if on mobile size
-        if (window.innerWidth < 684) {
+        // Disable dragging and reset position on mobile size
+        if (window.innerWidth < mobileBreakpoint) {
+          Draggable.get(cards).disable();
+          gsap.set(cards, { x: 0, y: 0 });
+
           return;
         }
-
-        // Get the container and cards with their classes
-        const container = document.querySelector(".card-container");
-        const cards = document.querySelectorAll(".card");
 
         // Loop through each card
         cards.forEach((card) => {
@@ -161,10 +197,11 @@
         });
 
         // Make the cards draggable
-        Draggable.create(".card", {
+        // More config options here: https://gsap.com/docs/v3/Plugins/Draggable/
+        Draggable.create(cards, {
           type: "x,y",
           edgeResistance: 0.7,
-          bounds: ".card-container",
+          bounds: container,
         });
       }
 
