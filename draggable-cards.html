@@ -8,30 +8,32 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Draggable.min.js"></script>
     <style>
       * {
-        box-sizing: inherit;
+        box-sizing: inherit; /* Needed for height: 100% to work. Gets rid of scrollbar */
       }
+      /* Fullscreen */
       html {
         height: 100%;
         box-sizing: border-box;
       }
       body {
+        display: grid; /* Needed for the card-container to fill the available space */
+        grid-template-rows: auto auto 1fr; /* 1fr takes the remaining space */
+
+        height: 100%; /* Fullscreen */
         margin: 0;
         padding: 10px;
-        height: 100%;
-        display: grid;
-        grid-template-rows: auto 1fr; /* 1fr takes the remaining space */
         font-family: sans-serif;
       }
       .card-container {
         border: 1px solid black;
       }
       .card {
+        position: absolute; /* NEEDED FOR THE RANDOM POSITION */
+
         width: 300px;
         height: 200px;
         border: 1px solid black;
         text-align: center;
-        cursor: grab;
-        position: absolute;
       }
       /* Mobile breakpoint, revert to defaults */
       @media (max-width: 684px) {
@@ -47,21 +49,24 @@
     </style>
   </head>
   <body>
-    <div style="padding-bottom: 10px">
+    <!-- SITE INFO -->
+    <div>
       <h1>Randomly Placed Draggable Cards</h1>
       <p>
         Made with
-        <a href="https://gsap.com/docs/v3/Plugins/Draggable/"
-          >GSAP's Draggable plugin.</a
-        >
-        The cards are randomly placed within the container and can be dragged
-        around. The placement isn't completely random. It is clustered around
-        the center of the container.
+        <a href="https://gsap.com/docs/v3/Plugins/Draggable/">GSAP's Draggable plugin.</a>
+        The cards are randomly placed within the container and can be dragged around. The placement isn't completely
+        random. It is clustered around the center of the container.
       </p>
       <p>
-        At mobile size (&lt;684px), the dragging and random placement is
-        disabled, and the cards are stacked in a column.
+        At mobile size (&lt;684px), the dragging and random placement is disabled, and the cards are stacked in a
+        column.
       </p>
+    </div>
+
+    <!-- CONTROLS -->
+    <div>
+      <!-- Slider for Cluster Centrality X -->
       <div>
         <label for="clusterCentralityX">Cluster Centrality X:</label>
         <input
@@ -76,6 +81,7 @@
         />
         <span id="clusterCentralityXValue">4</span>
       </div>
+      <!-- Slider for Cluster Centrality Y -->
       <div>
         <label for="clusterCentralityY">Cluster Centrality Y:</label>
         <input
@@ -90,8 +96,11 @@
         />
         <span id="clusterCentralityYValue">4</span>
       </div>
-      <button onclick="initializeDraggable()">Regenerate Positions</button>
+      <!-- Button to regenerate positions -->
+      <button onclick="initializeDraggable()" style="margin: 10px 0">Regenerate Positions</button>
     </div>
+
+    <!-- CARDS -->
     <div class="card-container">
       <div class="card" style="background-color: #ff7f7f">Card 1</div>
       <div class="card" style="background-color: #7f7fff">Card 2</div>
@@ -101,72 +110,81 @@
       <div class="card" style="background-color: #ffcc7f">Card 6</div>
     </div>
 
+    <!-- JS CODE TO MAKE THIS WORK -->
     <script>
       gsap.registerPlugin(Draggable);
 
+      // How clustered the cards are around the center
+      // Lower values = less clustered
       let clusterCentralityX = 4;
       let clusterCentralityY = 4;
 
-      // Generate random position for a card within the container
+      /**
+       * Generate random position for a card
+       * @param {HTMLElement} container - The container element
+       * @param {HTMLElement} card - The card element
+       * @returns x and y coordinates for the card
+       */
       function getRandomPosition(container, card) {
+        // Get the bounding rectangles
         const containerRect = container.getBoundingClientRect();
         const cardRect = card.getBoundingClientRect();
+
+        // Calculate the center of the container
         const centerX = containerRect.width / 2;
         const centerY = containerRect.height / 2;
-        const x =
-          centerX +
-          (Math.random() - 0.5) * (containerRect.width / clusterCentralityX) -
-          cardRect.width / 2;
-        const y =
-          centerY +
-          (Math.random() - 0.5) * (containerRect.height / clusterCentralityY) -
-          cardRect.height / 2;
+
+        // Generate a random position around clustered around the center
+        const x = centerX + (Math.random() - 0.5) * (containerRect.width / clusterCentralityX) - cardRect.width / 2;
+        const y = centerY + (Math.random() - 0.5) * (containerRect.height / clusterCentralityY) - cardRect.height / 2;
         return { x, y };
       }
 
-      // Enables draggable cards
+      /**
+       * Places the cards and makes them draggable
+       */
       function initializeDraggable() {
+        // Don't bother with this function if on mobile size
+        if (window.innerWidth < 684) {
+          return;
+        }
+
+        // Get the container and cards with their classes
         const container = document.querySelector(".card-container");
         const cards = document.querySelectorAll(".card");
 
-        // If the screen is large enough, make the cards draggable
-        if (window.innerWidth >= 684) {
-          // Set random positions for each card
-          cards.forEach((card) => {
-            const { x, y } = getRandomPosition(container, card);
-            gsap.set(card, { x, y });
-          });
+        // Loop through each card
+        cards.forEach((card) => {
+          // Get a random x and y position for this card
+          const { x, y } = getRandomPosition(container, card);
+          gsap.set(card, { x, y });
+        });
 
-          // Make the cards draggable
-          Draggable.create(".card", {
-            type: "x,y",
-            edgeResistance: 0.7,
-            bounds: ".card-container",
-          });
-        } else {
-          // Mobile size
-          // Reset card positions and disable dragging
-          cards.forEach((card) => {
-            gsap.set(card, { x: 0, y: 0 });
-          });
-        }
+        // Make the cards draggable
+        Draggable.create(".card", {
+          type: "x,y",
+          edgeResistance: 0.7,
+          bounds: ".card-container",
+        });
       }
 
-      // Update clusterCentrality values when the sliders are changed
+      /**
+       * Update clusterCentrality values when the sliders are changed
+       * @param {string} axis - The axis to update
+       * @param {number} value - The new value
+       */
       function updateClusterCentrality(axis, value) {
         if (axis === "X") {
           clusterCentralityX = parseFloat(value);
-          document.getElementById("clusterCentralityXValue").textContent =
-            value;
+          document.getElementById("clusterCentralityXValue").textContent = value;
         } else if (axis === "Y") {
           clusterCentralityY = parseFloat(value);
-          document.getElementById("clusterCentralityYValue").textContent =
-            value;
+          document.getElementById("clusterCentralityYValue").textContent = value;
         }
         initializeDraggable();
       }
 
-      // Initialize draggable on load
+      // Initialize draggable on page load
       initializeDraggable();
 
       // Re-initialize draggable on window resize
