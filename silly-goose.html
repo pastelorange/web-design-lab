@@ -11,7 +11,7 @@
       referrerpolicy="no-referrer"
     ></script>
   </head>
-  <body>
+  <body style="margin: 0; overflow: hidden">
     <script>
       let textStr = "silly goose";
       let layers = 3;
@@ -61,6 +61,10 @@
 
       function randomColor() {
         return color(random(255), random(255), random(255), 255); // R G B A
+      }
+
+      function windowResized() {
+        resizeCanvas(windowWidth, windowHeight);
       }
     </script>
   </body>
