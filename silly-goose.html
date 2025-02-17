@@ -60,7 +60,15 @@
       }
 
       function randomColor() {
-        return color(random(255), random(255), random(255), 255); // R G B A
+        // Generate a more saturated color using HSL
+        colorMode(HSL);
+        let h = random(360); // Hue
+        let s = random(50, 100); // Saturation (50-100%)
+        let l = random(30, 80); // Lightness (30-80%)
+        let a = 100; // Alpha (100% opaque)
+        let c = color(h, s, l, a);
+        colorMode(RGB); // Switch back to RGB for other parts of the code
+        return c;
       }
 
       function windowResized() {
