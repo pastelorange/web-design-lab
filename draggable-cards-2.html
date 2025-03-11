@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Draggable Cards - GSAP</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/Draggable.min.js"></script>
+    <script src="draggable-cards.js" defer></script>
+    <style>
+      * {
+        box-sizing: inherit; /* Needed for height: 100% to work. Gets rid of scrollbar */
+      }
+      /* Fullscreen */
+      html {
+        height: 100%;
+        box-sizing: border-box;
+      }
+      body {
+        display: grid; /* Needed for the card-container to fill the available space */
+        height: 100%; /* Fullscreen */
+        margin: 0;
+        padding: 20px;
+        font-family: sans-serif;
+      }
+      .card-container {
+        border: 1px dashed black;
+      }
+      .card {
+        position: absolute; /* NEEDED FOR THE RANDOM POSITION */
+
+        width: 300px;
+        height: 200px;
+        border: 1px solid black;
+        text-align: center;
+      }
+      /* Mobile breakpoint, revert to defaults */
+      @media (max-width: 684px) {
+        html,
+        body {
+          height: auto;
+        }
+        .card {
+          position: static;
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- DRAGGABLE CARDS -->
+    <div class="card-container">
+      <div class="card" style="background-color: #ff7f7f">Card 1</div>
+      <div class="card" style="background-color: #7f7fff">Card 2</div>
+      <div class="card" style="background-color: #7fff7f">Card 3</div>
+      <div class="card" style="background-color: #fff777">Card 4</div>
+      <div class="card" style="background-color: #cc7fff">Card 5</div>
+      <div class="card" style="background-color: #ffcc7f">Card 6</div>
+      <div class="card" style="background-color: #7fffff">Card 7</div>
+      <div class="card" style="background-color: #ff7fff">Card 8</div>
+      <div class="card" style="background-color: #888888">Card 9</div>
+      <div class="card" style="background-color: #ff9b61">Card 10</div>
+    </div>
+  </body>
+</html>
