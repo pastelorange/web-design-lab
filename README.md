@@ -1,3 +1,5 @@
-# Web Design Experiments
+# Web Design Lab
 
-Pages with unconventional web designs.
+🧪 Trying out unconventional web design.
+
+Online previews available at https://pastel.computer/code
