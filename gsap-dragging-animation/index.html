@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GSAP Dragging + Animation</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/Draggable.min.js"></script>
+    <script src="script.js" defer></script>
+    <style>
+      * {
+        box-sizing: inherit; /* Needed for height: 100% to work. Gets rid of scrollbar */
+      }
+      /* Fullscreen */
+      html {
+        height: 100%;
+        box-sizing: border-box;
+      }
+      body {
+        display: grid; /* Needed for the card-container to fill the available space */
+        height: 100%; /* Fullscreen */
+        margin: 0;
+        padding: 20px;
+        font-family: sans-serif;
+      }
+      .card-container {
+        border: 1px dashed black;
+      }
+      .card {
+        position: absolute; /* !!! Needed for random position */
+
+        /* Rest is just for the demo */
+        width: 200px;
+        height: 150px;
+        border: 1px solid black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* Mobile breakpoint, revert to defaults */
+      @media (max-width: 684px) {
+        html,
+        body {
+          height: auto;
+        }
+        .card {
+          position: static;
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- DRAGGABLE CARDS -->
+    <div class="card-container">
+      <!-- DRAGGABLE CARDS -->
+      <script>
+        // This inline JS is for generating card elements with random colours
+        // The cards are <div> elements with the class "card"
+
+        /**
+         * Function to generate random HSL color
+         */
+        function getRandomColor() {
+          // Generate more visually pleasing colors with controlled saturation and lightness
+          const hue = Math.floor(Math.random() * 360);
+          const saturation = Math.floor(Math.random() * 30) + 70; // 70-100%
+          const lightness = Math.floor(Math.random() * 20) + 60; // 60-80%
+          return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        }
+
+        /**
+         * Creates a specified number of cards and adds them to the container
+         * @param {number} count - Number of cards to create
+         */
+        function createCards(count) {
+          const container = document.querySelector(".card-container");
+          container.innerHTML = "";
+
+          for (let i = 1; i <= count; i++) {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.textContent = `Card ${i}`;
+            card.style.backgroundColor = getRandomColor();
+            container.appendChild(card);
+          }
+        }
+        createCards(30);
+      </script>
+    </div>
+  </body>
+</html>
