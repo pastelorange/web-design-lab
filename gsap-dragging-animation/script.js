@@ -1,10 +1,10 @@
 // How clustered the cards are around the center
 // Lower values = less clustered
-const clusterCentralityX = 4;
-const clusterCentralityY = 4;
+const clusterCentralityX = 2;
+const clusterCentralityY = 2;
 
 // T: Clustered, F: Random
-const isClustered = false;
+const isClustered = true;
 
 const isAnimated = true;
 
@@ -80,6 +80,12 @@ function initializeDraggable() {
     type: "x,y",
     edgeResistance: 0.7,
     bounds: container,
+    onDragEnd: function () {
+      // Restart the animation when dragging ends
+      if (isAnimated) {
+        animateFloating(this.target);
+      }
+    },
   });
 }
 
