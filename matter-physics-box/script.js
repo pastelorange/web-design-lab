@@ -75,7 +75,7 @@ let lsc = Bodies.rectangle(matterContainer.clientWidth / 4, 0, 316 * 1, 316 * 1,
   restitution: 0.8,
   render: {
     sprite: {
-      texture: "/img/lsc.webp",
+      texture: "../img/lsc.webp",
       xScale: 1,
       yScale: 1,
     },
@@ -91,7 +91,7 @@ let miau = Bodies.rectangle(matterContainer.clientWidth / 2, 0, 500 * 0.5, 500 *
   restitution: 0.8,
   render: {
     sprite: {
-      texture: "/img/miau.png",
+      texture: "../img/miau.png",
       xScale: 0.5,
       yScale: 0.5,
     },
@@ -107,7 +107,7 @@ let shikanoko = Bodies.rectangle(matterContainer.clientWidth, 0, 323, 378, {
   restitution: 0.8,
   render: {
     sprite: {
-      texture: "/img/shikanoko.png",
+      texture: "../img/shikanoko.png",
       xScale: 1.0,
       yScale: 1.0,
     },
